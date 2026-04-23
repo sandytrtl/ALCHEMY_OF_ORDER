@@ -1,4 +1,3 @@
-/* ── SCREEN MANAGER ──────────────────────────────────────────── */
 const ScreenManager = (function () {
   let currentScreen = 'intro';
   let history = [];
@@ -132,16 +131,6 @@ const ScreenManager = (function () {
 })();
 
 
-/* ── SMOKE EFFECT ────────────────────────────────────────────── */
-/*
-  Two canvas systems:
-    Left  (#smoke-left)  — clay pot, warm earthy grey smoke
-    Right (#smoke-right) — magic cauldron, purple+teal smoke
-
-  Each canvas covers the jar + space above.
-  Puffs spawn from the jar mouth (bottom-center of canvas),
-  drift upward with wobble, swell as they rise, fade out.
-*/
 (function initSmoke() {
 
   function buildSmokeSystem(canvasId, cfg) {
@@ -252,46 +241,13 @@ const ScreenManager = (function () {
     draw();
   }
 
-  /*
-    Left clay pot:
-      Canvas: left=7%, width=22%, bottom=0, height=36%
-      JS source: x=18% of container → within canvas: (18%-7%)/22% ≈ 50%
-      JS source: y=67.5% of container → canvas top=(100%-36%)=64%
-                 within canvas: (67.5%-64%)/36% ≈ 10% from canvas top
-                 → mouthY = 0.10 (near top of canvas = near jar mouth)
-    Colors: warm grey-brown (clay pot, no magic)
-  */
+  
   buildSmokeSystem('smoke-left', {
     colors:      ['#9a8A7a', '#b09a88', '#7a6858', '#c8b8a8', '#a09080'],
-
-    // ── POSITION (within this canvas) ─────────────────────────
-    // mouthX: horizontal spawn point inside the canvas (0 = left edge, 1 = right edge)
-    //   → move smoke LEFT:  decrease (e.g. 0.40)
-    //   → move smoke RIGHT: increase (e.g. 0.60)
     mouthX:      0.50,
-
-    // mouthY: vertical spawn point inside the canvas (0 = top, 1 = bottom)
-    //   → move smoke LOWER (closer to pot):  increase (e.g. 0.40, 0.70)
-    //   → move smoke HIGHER (farther above): decrease (e.g. 0.05)
     mouthY:      0.10,
-
-    // mouthSpread: horizontal randomness of spawn (0 = single point, 0.5 = wide)
-    //   → wider spread: increase (e.g. 0.30)
     mouthSpread: 0.16,
-
-    // NOTE: to move the whole smoke region (canvas box) left/right/up/down,
-    // edit #smoke-left in intro.css:
-    //   left:   7%   → decrease to move canvas LEFT  (e.g. 2%)
-    //   bottom: 0    → increase to move canvas UP     (e.g. 5%)
-    //   width:  22%  → increase to make canvas WIDER  (e.g. 30%)
-    //   height: 36%  → increase to make canvas TALLER (e.g. 50%)
-
-    // ── SIZE ──────────────────────────────────────────────────
-    // sizeBase + sizeMin control how big each puff starts
-    //   → make smoke BIGGER: increase both (e.g. sizeBase: 20, sizeMin: 24)
-    //   → make smoke SMALLER: decrease both (e.g. sizeBase: 5, sizeMin: 6)
     sizeBase:    10, sizeMin: 12,
-
     speedMin:    0.30, speedMax: 0.55,
     driftX:      0.30,
     wobble:      1.0,
@@ -303,35 +259,10 @@ const ScreenManager = (function () {
 
   buildSmokeSystem('smoke-right', {
     colors:      ['#8020d0', '#9b5cf6', '#6d28d9', '#2dd4bf', '#0d9488', '#a855f7'],
-
-    // ── POSITION (within this canvas) ─────────────────────────
-    // mouthX: horizontal spawn point inside the canvas (0 = left edge, 1 = right edge)
-    //   → move smoke LEFT:  decrease (e.g. 0.35)
-    //   → move smoke RIGHT: increase (e.g. 0.65)
     mouthX:      0.50,
-
-    // mouthY: vertical spawn point inside the canvas (0 = top, 1 = bottom)
-    //   → move smoke LOWER (closer to cauldron): increase (e.g. 0.40, 0.70)
-    //   → move smoke HIGHER (farther above):     decrease (e.g. 0.05)
     mouthY:      0.10,
-
-    // mouthSpread: horizontal randomness of spawn (0 = single point, 0.5 = wide)
-    //   → wider spread: increase (e.g. 0.35)
     mouthSpread: 0.20,
-
-    // NOTE: to move the whole smoke region (canvas box) left/right/up/down,
-    // edit #smoke-right in intro.css:
-    //   left:   68%  → decrease to move canvas LEFT  (e.g. 60%)
-    //   bottom: 0    → increase to move canvas UP     (e.g. 5%)
-    //   width:  24%  → increase to make canvas WIDER  (e.g. 32%)
-    //   height: 42%  → increase to make canvas TALLER (e.g. 55%)
-
-    // ── SIZE ──────────────────────────────────────────────────
-    // sizeBase + sizeMin control how big each puff starts
-    //   → make smoke BIGGER: increase both (e.g. sizeBase: 24, sizeMin: 28)
-    //   → make smoke SMALLER: decrease both (e.g. sizeBase: 6, sizeMin: 8)
     sizeBase:    12, sizeMin: 14,
-
     speedMin:    0.35, speedMax: 0.65,
     driftX:      0.40,
     wobble:      1.5,
@@ -344,7 +275,6 @@ const ScreenManager = (function () {
 })();
 
 
-/* ── MENU PARTICLES ──────────────────────────────────────────── */
 (function initMenuParticles() {
   let started = false;
 
@@ -440,7 +370,6 @@ const ScreenManager = (function () {
   window._startMenuParticles = start;
 })();
 
-/* ── MENU INIT ───────────────────────────────────────────────── */
 function initMenu() {
   if (window._startMenuParticles) window._startMenuParticles();
   GameState.updateCoinDisplays();
@@ -481,7 +410,6 @@ function initMenu() {
 }
 
 
-/* ── GAMEPLAY BRIDGE ─────────────────────────────────────────── */
 
 function startLevel(levelId) {
   const level = LEVEL_DATA.get(levelId);
@@ -719,7 +647,6 @@ document.addEventListener('DOMContentLoaded', () => {
 window.GameBridge = { triggerInvalidMove, triggerWin, triggerOutOfMoves };
 
 
-/* ── TOAST ───────────────────────────────────────────────────── */
 let toastTimeout;
 function showToast(msg) {
   const t = document.getElementById('toast');

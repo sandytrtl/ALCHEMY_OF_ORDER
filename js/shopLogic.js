@@ -80,7 +80,6 @@ const GameState = (function () {
 })();
 
 
-/* ── BACKGROUNDS DATA ────────────────────────────────────────── */
 const BACKGROUNDS = [
   {
     id: 'default', name: 'Arcane Void', emoji: '🌌', free: true,
@@ -138,18 +137,18 @@ const BACKGROUNDS = [
   },
 ];
 
-/* ── APPLY BACKGROUND ────────────────────────────────────────── */
 function applyBackground(id) {
   const bg = BACKGROUNDS.find(b => b.id === id) || BACKGROUNDS[0];
   const gradient = [...bg.radials, bg.base].join(', ');
 
   // Apply to body and every .arcane-bg element
+
+  
   document.body.style.background = gradient;
   document.querySelectorAll('.arcane-bg').forEach(el => {
     el.style.background = gradient;
   });
 
-  // Update the CSS variable so anything using var(--deep-void) matches
   document.documentElement.style.setProperty('--deep-void', bg.base);
 
   // Persist
@@ -163,11 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-/* ── SHOP INIT ───────────────────────────────────────────────── */
-/**
- * Renders the shop grid and wires up buy / activate click handlers.
- * Called by ScreenManager.show('shop').
- */
+
 function initShop() {
   GameState.updateCoinDisplays();
 

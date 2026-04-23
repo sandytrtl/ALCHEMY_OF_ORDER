@@ -21,15 +21,13 @@ class Vial {
     this.shakeOffset = 0;   // x-offset for invalid-move shake animation
   }
 
-  /* ── QUERIES ───────────────────────────────────────────────── */
 
   get isEmpty()   { return this.layers.length === 0; }
   get isFull()    { return this.layers.length >= this.maxLayers; }
   get topColor()  { return this.isEmpty ? null : this.layers[this.layers.length - 1]; }
   
   /**
-   * FIX: Calculates the exact Y-center for a layer at a specific index.
-   * Prevents visual gaps and overlaps by using index-based positioning.
+  
    * @param {number} baseY - The screen Y coordinate of the vial bottom.
    * @param {number} layerH - The height of a single potion layer.
    * @returns {number}
@@ -59,7 +57,6 @@ class Vial {
     return this.topColor === fromVial.topColor;
   }
 
-  /* ── MUTATIONS ─────────────────────────────────────────────── */
 
   /**
    * Remove and return the top layer.
@@ -94,7 +91,6 @@ class Vial {
     return count;
   }
 
-  /* ── SERIALISATION (for undo stack) ────────────────────────── */
 
   /** Return a plain-object snapshot for undo/redo. */
   snapshot() {

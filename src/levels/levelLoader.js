@@ -125,7 +125,6 @@ class LevelLoader {
       }
     }
 
-    // ── Fallback ──────────────────────────────────────────────
     return this._buildFallback(layersPerVial, colors, filledVials, emptyVials, mechanic);
   }
 
@@ -223,8 +222,7 @@ class LevelLoader {
       pool.push(colors[i % colors.length]);
     }
 
-    // Try up to 20 shuffles until we get a layout with zero pure vials.
-    // This is fast — pure-free layouts are common once the pool is even.
+    
     for (let attempt = 0; attempt < 20; attempt++) {
       // Fisher-Yates shuffle
       for (let i = pool.length - 1; i > 0; i--) {

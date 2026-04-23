@@ -3,50 +3,37 @@
 class Character {
   /**
    * @param {object} [options]
-   * @param {number}  options.floatAmplitude - px of float travel (default 12)
-   * @param {number}  options.floatSpeed     - radians per frame (default 0.03)
+   * @param {number}  options.floatAmplitude 
+   * @param {number}  options.floatSpeed     
    */
   constructor({ floatAmplitude = 12, floatSpeed = 0.03 } = {}) {
-    this.state          = 'idle';   // 'idle' | 'happy' | 'reject'
+    this.state          = 'idle';   
     this.floatAmplitude = floatAmplitude;
     this.floatSpeed     = floatSpeed;
     this._phase         = 0;
-
-    // Rejection shake state
+    // Rejection shake
     this._shakeFrames   = 0;
     this._shakeOffset   = 0;
 
-    // State timers
     this._stateTimer    = 0;
   }
 
-  /* ── STATE CONTROL ─────────────────────────────────────────── */
-
-  /** Switch to happy state (shown after win). */
   celebrate() {
     this.state       = 'happy';
     this._stateTimer = 120; // frames
   }
-
-  /** Trigger rejection shake (shown on invalid move). */
   reject() {
     this.state        = 'reject';
     this._shakeFrames = 20;
     this._stateTimer  = 20;
   }
-
-  /** Return to idle state. */
   idle() {
     this.state = 'idle';
   }
 
-  /* ── UPDATE ────────────────────────────────────────────────── */
-
-  /** Call once per draw frame to advance animation. */
   update() {
     this._phase += this.floatSpeed;
 
-    // Auto-revert to idle after timed states
     if (this._stateTimer > 0) {
       this._stateTimer--;
       if (this._stateTimer === 0 && this.state !== 'idle') {

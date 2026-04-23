@@ -1,8 +1,12 @@
-# Alchemy of Order 🧙‍♀️
+# About the Project
+**Alchemy of Order** is a logic-based puzzle game developed as a deep dive into interactive web mechanics and physics-based animations. Players take on the role of an alchemist tasked with sorting magical reagents into their correct vials. The project focuses on a seamless user experience, featuring a custom-built liquid physics system and a dynamic shop interface for character and background customization.
 
-A potion sorting puzzle game built with HTML, CSS, JavaScript, and p5.js.
+# Key Technical Features
+* **Physics-driven Visuals:** Implementation of a particle-based liquid system using `p5.js` for realistic pouring and mixing effects.
+* **Modular Architecture:** Organized using a clear separation of concerns—Data, Game Logic, Physics, and Rendering layers.
+* **State Management:** Robust win-detection logic, move tracking, and undo functionality.
 
-## File Structure
+# File Structure
 
 ```
 alchemy-of-order/
@@ -50,22 +54,6 @@ alchemy-of-order/
     └── sounds/                 # Audio files (MP3/OGG)
 ```
 
-## How to Run
-
-Open `index.html` in a browser. Because of how the scripts load local files, use a local server:
-
-```bash
-# Python
-python -m http.server 8000
-
-# Node (npx)
-npx serve .
-
-# VS Code → Live Server extension
-```
-
-Then visit `http://localhost:8000`.
-
 ## Architecture
 
 | Layer | Files | Responsibility |
@@ -77,14 +65,6 @@ Then visit `http://localhost:8000`.
 | **HTML UI** | `screenManager.js`, `shopLogic.js` | Screen transitions, HUD, shop |
 | **Styling** | `css/*.css` | All visual styling by screen |
 
-## Adding Your Images
-
-1. Drop image files into `assets/images/character/`
-2. In `index.html`, replace the emoji `<div class="witch-placeholder">🧙‍♀️</div>` with:
-   ```html
-   <img class="witch-img" src="assets/images/character/witch_idle.png" alt="Witch">
-   ```
-3. For backgrounds, add image files to `assets/images/backgrounds/` and update the `BACKGROUNDS` array in `js/shopLogic.js`.
 
 ## Level Progression
 

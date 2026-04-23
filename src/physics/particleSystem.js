@@ -5,7 +5,6 @@ class ParticleSystem {
     this.particles = [];
   }
 
-  /* ── EMITTERS ──────────────────────────────────────────────── */
 
   /**
    * Emit a splash burst when liquid lands in a vial.
@@ -76,7 +75,6 @@ class ParticleSystem {
     });
   }
 
-  /* ── UPDATE ────────────────────────────────────────────────── */
 
   update() {
     this.particles.forEach(p => {
@@ -96,7 +94,6 @@ class ParticleSystem {
     this.particles = this.particles.filter(p => p.life > 0 && p.size > 0.3);
   }
 
-  /* ── DRAW ──────────────────────────────────────────────────── */
 
   /**
    * Render all active particles.

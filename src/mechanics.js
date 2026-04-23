@@ -1,18 +1,4 @@
-/* ================================================================
-   mechanics.js — Special level mechanic handlers
-   Alchemy of Order
-
-   Each mechanic is a set of hooks the GameEngine calls during play:
-     onLevelLoad(vials)         — set up initial state
-     onBeforePour(from, to)     — return false to block the pour
-     onAfterPour(from, to)      — trigger side effects
-     onDrawVial(p, vial, x, y)  — overlay decorations (called by ui.js)
-     onUpdate(vials)            — per-frame logic (timers, etc.)
-================================================================ */
-
 const Mechanics = {
-
-  /* ── NONE ──────────────────────────────────────────────────── */
   none: {
     onLevelLoad()       {},
     onBeforePour()      { return true; },
@@ -21,17 +7,16 @@ const Mechanics = {
     onUpdate()          {},
   },
 
-  /* ── FADING VIALS ──────────────────────────────────────────── */
   // Vial labels fade out after a short delay, testing player memory.
   fading: {
-    VISIBLE_MS: 3000,   // ms before fading begins
-    FADE_MS:    2000,   // ms to fully fade out
+    VISIBLE_MS: 3000,   
+    FADE_MS:    2000,   
 
     onLevelLoad(vials) {
       vials.forEach(v => {
         if (v.mechanic === 'fading') {
           v.fadingTimer    = Date.now();
-          v.fadingProgress = 1; // fully visible
+          v.fadingProgress = 1; 
         }
       });
     },
@@ -39,10 +24,9 @@ const Mechanics = {
     onBeforePour(from, to) { return true; },
     onAfterPour(from, to)  {},
 
-    /** Draw a translucent overlay over faded vials. */
     onDrawVial(p, vial, x, y, vialW, vialH) {
       if (vial.mechanic !== 'fading') return;
-      const alpha = 255 * (1 - vial.fadingProgress); // 0 = visible, 255 = hidden
+      const alpha = 255 * (1 - vial.fadingProgress); 
       if (alpha <= 0) return;
       p.noStroke();
       p.fill(15, 10, 30, alpha);
@@ -72,13 +56,9 @@ const Mechanics = {
     },
   },
 
-  /* ── RUNE-LOCKED ───────────────────────────────────────────── */
   // Certain vials are locked and can only be unlocked by a catalyst pour.
  rune: {
   onLevelLoad(vials) {
-    // Lock by lockColor (set by LevelLoader), not by mechanic tag —
-    // LevelLoader only sets mechanic on even-indexed vials but sets
-    // lockColor on any vial that should be locked.
     vials.forEach(v => {
       if (v.lockColor) {
         v.isLocked   = true;
@@ -93,7 +73,6 @@ const Mechanics = {
   },
 
   // Unlock by color-key: complete a full same-color vial to unlock
-  // all vials whose lockColor matches that completed color.
   onAfterPour(from, to, allVials) {
     allVials.forEach(v => {
       if (v.layers.length === 4 && v.layers.every(c => c === v.layers[0])) {
@@ -122,9 +101,7 @@ const Mechanics = {
   onUpdate() {},
 },
 
-  /* ── UNSTABLE ──────────────────────────────────────────────── */
   // Certain potions are unstable: after being poured they trigger
-  // a forced random shuffle of a random vial's top layer.
   unstable: {
     onLevelLoad(vials) {
       vials.forEach(v => {
@@ -136,19 +113,16 @@ const Mechanics = {
 
     onBeforePour(from, to) { return true; },
 
-    /* Inside mechanics.js -> unstable: { ... } */
 reset() {
   const self = gameMechanics.unstable;
   self._started = false;
   self._failed = false;
   self._meter = 100;
   self._displayMeter = 100;
-  // This ensures that even if onUpdate runs one last time, it does nothing
 },
 
     onAfterPour(from, to, allVials) {
       if (!to.isUnstable) return;
-      // Swap the top layer of 'to' with a random non-empty vial
       const candidates = allVials.filter(v => v !== to && !v.isEmpty && !v.isFull);
       if (candidates.length === 0) return;
       const target  = candidates[Math.floor(Math.random() * candidates.length)];
@@ -159,7 +133,6 @@ reset() {
     },
 
    onDrawVial(p, vial, x, y, vialW, vialH) {
-      // 1. Handle Unlocking Animation (The Glow)
       if (vial.unlockAnim > 0) {
         vial.unlockAnim--;
         const prog = vial.unlockAnim / 60;
@@ -174,34 +147,27 @@ reset() {
 
       if (!vial.isLocked) return;
 
-      // 2. Darken the vial slightly
       p.noStroke();
       p.fill(15, 10, 30, 150);
       p.rect(x - vialW/2, y - vialH/2, vialW, vialH, 6, 6, 16, 16);
 
-      // 3. Draw your custom lock image
       if (window.imgLock) {
         p.imageMode(p.CENTER);
         
-        // Calculate size (slightly wider than vial to show the chains)
         const imgRatio = window.imgLock.width / window.imgLock.height;
         const targetW = vialW * 1.4; 
         const targetH = targetW / imgRatio;
 
-        // Subtle hover pulse
         const pulse = 2 * Math.sin(Date.now() * 0.003);
         
-        // Apply a color tint based on the lockColor (Optional)
         const lockCol = _hexToRgb(
           window.LEVEL_DATA ? (LEVEL_DATA.COLORS[vial.lockColor] || '#a855f7') : '#a855f7'
         );
         
-        // Use tint to make the rune glow slightly in the key color
         p.tint(lockCol.r, lockCol.g, lockCol.b, 255); 
         p.image(window.imgLock, x, y, targetW + pulse, targetH + pulse);
         p.noTint(); 
       } else {
-        // Fallback if image fails to load
         p.fill(255);
         p.textAlign(p.CENTER, p.CENTER);
         p.text('LOCKED', x, y);
@@ -212,7 +178,6 @@ reset() {
   },
   
 
-  /* ── COMBINED ──────────────────────────────────────────────── */
   // Applies both rune and unstable mechanics simultaneously.
   combined: {
     onLevelLoad(vials) {
@@ -238,7 +203,7 @@ reset() {
 };
 
 /**
- * Get the mechanic handler for a given mechanic string.
+ * 
  * @param  {string} name
  * @returns {object} mechanic handler
  */

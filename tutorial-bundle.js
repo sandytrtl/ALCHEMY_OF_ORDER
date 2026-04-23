@@ -1,13 +1,8 @@
 
 (function () {
 'use strict';
-
-/* ══════════════════════════════════════════════════════════════
-   1. CSS
-══════════════════════════════════════════════════════════════ */
 document.head.insertAdjacentHTML('beforeend', `<style id="tut-style">
 
-/* ── Info overlay (blocks clicks during info slides) ─────────── */
 #tut-ov {
   position:fixed; inset:0; z-index:9000;
   display:flex; align-items:center; justify-content:center;
@@ -20,7 +15,6 @@ document.head.insertAdjacentHTML('beforeend', `<style id="tut-style">
 }
 #tut-ov.on { opacity:1; visibility:visible; pointer-events:auto; }
 
-/* ── Floating card for interactive steps (outside overlay!) ──── */
 #tut-float {
   position:fixed;
   left:50%; bottom:28px;
@@ -31,7 +25,6 @@ document.head.insertAdjacentHTML('beforeend', `<style id="tut-style">
 }
 #tut-float.on { display:block; }
 
-/* ── Dim mask (interactive steps only) ──────────────────────── */
 #tut-dim {
   position:fixed; inset:0;
   z-index:9100;
@@ -42,7 +35,6 @@ document.head.insertAdjacentHTML('beforeend', `<style id="tut-style">
 }
 #tut-dim.on { opacity:1; visibility:visible; }
 
-/* ── Spotlight ring ──────────────────────────────────────────── */
 #tut-ring {
   position:fixed; border-radius:50%;
   pointer-events:none; z-index:9150;
@@ -57,7 +49,6 @@ document.head.insertAdjacentHTML('beforeend', `<style id="tut-style">
   50%    { box-shadow:0 0 42px 14px rgba(233,196,106,.85),0 0 80px 20px rgba(168,85,247,.5); }
 }
 
-/* ── Bouncing arrow ──────────────────────────────────────────── */
 #tut-arrow {
   position:fixed; pointer-events:none; z-index:9151;
   font-size:28px; color:#FFD700;
@@ -71,7 +62,7 @@ document.head.insertAdjacentHTML('beforeend', `<style id="tut-style">
   50%    { transform:translateY(-12px); }
 }
 
-/* ══ SHARED CARD STYLES ═══════════════════════════════════════ */
+
 .tc {
   width:min(460px,90vw);
   background:linear-gradient(168deg,#140830 0%,#0a0420 100%);
@@ -211,9 +202,6 @@ document.head.insertAdjacentHTML('beforeend', `<style id="tut-style">
 
 </style>`);
 
-/* ══════════════════════════════════════════════════════════════
-   2. DOM
-══════════════════════════════════════════════════════════════ */
 document.body.insertAdjacentHTML('beforeend', `
 <!-- INFO overlay card -->
 <div id="tut-ov">
@@ -272,9 +260,6 @@ var ARROW    = document.getElementById('tut-arrow');
 var INFO_C   = document.getElementById('tut-info-card');
 var ACT_C    = document.getElementById('tut-act-card');
 
-/* ══════════════════════════════════════════════════════════════
-   3. SLIDES
-══════════════════════════════════════════════════════════════ */
 var SLIDES = [
   { title:'Welcome, Apprentice!', desc:'Sort the potions so every vial holds <em>only one color</em>. Let\'s walk through your first move!', draw:drawWelcome },
   { title:'Tap to Pour', desc:'Select a vial, then tap another to pour the top potion into it.', draw:drawPourDemo },
@@ -295,9 +280,7 @@ var SLIDES = [
   { title:"You're Ready!", desc:'Sort every vial to a single color to complete the level. Good luck, Apprentice!', draw:drawReady, isFinal:true },
 ];
 
-/* ══════════════════════════════════════════════════════════════
-   4. ILLUSTRATION PAINTERS
-══════════════════════════════════════════════════════════════ */
+
 var COL = { red:[239,68,68], blue:[59,130,246], green:[34,197,94], yellow:[234,179,8], purple:[168,85,247] };
 function rgbaC(c,a){ return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'; }
 

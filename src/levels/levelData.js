@@ -75,9 +75,7 @@ const RAW_LEVEL_DATA = [
   ],
 },
 
-  /* ══════════════════════════════════════════════════════════════
-     LEVELS 6–10: Fading Vials
-  ══════════════════════════════════════════════════════════════ */
+ 
   {
     id: 6, name: 'Fading Memory',
     // Intro to fading — small board, easy par, learn the mechanic
@@ -114,9 +112,6 @@ const RAW_LEVEL_DATA = [
     starThresholds: { 3: 18, 2: 27, 1: 40 },
   },
 
- /* ══════════════════════════════════════════════════════════════
-      LEVELS 11–15: Locked Potions
-  ══════════════════════════════════════════════════════════════ */
   {
     id: 11, name: 'Rune Gate',
     vialCount: 5, colors: ['red', 'blue', 'green'], emptyVials: 2,
@@ -173,9 +168,7 @@ const RAW_LEVEL_DATA = [
     // will handle the individual colors from lockConfig.
   },
 
-  /* ══════════════════════════════════════════════════════════════
-     LEVELS 16–20: Timed Potion (Stability Meter)
-  ══════════════════════════════════════════════════════════════ */
+
   {
     id: 16, name: 'Volatile Brew',
     vialCount: 5, colors: ['red', 'blue', 'green'], emptyVials: 2,
@@ -217,12 +210,6 @@ const RAW_LEVEL_DATA = [
     timerConfig: { drainPerSec: 5 },
   },
 
-  /* ══════════════════════════════════════════════════════════════
-     LEVELS 21–25: Hidden Layers + Timer Combination
-     hiddenConfig.hiddenBelow: how many bottom layers are hidden
-     hiddenConfig.reveals:     number of reveal taps allowed
-     hiddenConfig.drainPerSec: timer drain rate
-  ══════════════════════════════════════════════════════════════ */
   {
     id: 21, name: 'The Convergence',
     vialCount: 7, colors: ['red', 'blue', 'green', 'yellow', 'purple'], emptyVials: 2,
