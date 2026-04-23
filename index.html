@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Alchemy of Order</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/intro.css">
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/winScreen.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/tutorial.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+</head>
+<body class="arcane-bg">
+
+  <canvas id="particles-canvas"></canvas>
+  <div id="toast"></div>
+
+  <div id="screen-intro" class="screen active">
+    <div class="intro-container">
+      <img src="assets/images/backgrounds/intro_background.png"
+           alt="" class="intro-bg" draggable="false">
+      <div class="intro-vignette"></div>
+      <canvas id="smoke-left"  class="smoke-canvas"></canvas>
+      <canvas id="smoke-right" class="smoke-canvas"></canvas>
+      <div class="banner-wrapper">
+        <img src="assets/images/ui/banner.png"
+             alt="Alchemy of Order" class="title-banner" draggable="false">
+        <div class="banner-text">
+          <h1 class="game-title">Alchemy of Order</h1>
+          <p class="game-subtitle">Potion-Sorting Puzzle Game</p>
+        </div>
+      </div>
+      <img src="assets/images/character/intro_witch1.png"
+           alt="Witch" class="witch-sprite" draggable="false">
+      <div class="intro-buttons">
+        <button id="btn-begin" class="fantasy-button">
+          <span class="plus-icon">✦</span> Play
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-menu" class="screen arcane-bg">
+    <canvas id="menu-particles" class="menu-particles-canvas"></canvas>
+    <div class="menu-wrapper">
+      <h2 class="menu-header">Select Your Trial</h2>
+      <div class="coin-display">
+        <span class="coin-icon">🪙</span>
+        <span id="menu-coin-count">0</span> coins
+      </div>
+      <div class="menu-grid" id="level-grid"></div>
+      <div class="menu-actions">
+        <button class="btn-secondary" onclick="ScreenManager.show('intro')">← Back</button>
+        <button class="btn-secondary" onclick="ScreenManager.show('shop')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg> Shop</button>
+        <button class="btn-secondary" id="btn-settings" onclick="SettingsModal.open()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-gameplay" class="screen arcane-bg">
+    <div class="hud-gem hud-gem-l">◆</div>
+    <div class="hud-gem hud-gem-r">◆</div>
+    <div class="hud">
+      <div class="hud-left">
+        <button class="hud-btn hud-btn-back" 
+        onclick="if(window.TutorialManager && TutorialManager.isActive()) return; 
+                 window.cleanupLevelState(); 
+                 ScreenManager.show('menu')" 
+        title="Back to menu">
+  <span class="hud-btn-icon">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+  </span>
+  <span class="hud-btn-label">Menu</span>
+</button>
+<div class="restart-wrap">
+<button class="hud-btn hud-btn-restart" 
+        onclick="if(window.TutorialManager && TutorialManager.isActive()) return;
+                 let currentId = Game.currentLevel ? Game.currentLevel.id : null;
+                 window.cleanupLevelState();
+                 if(currentId) {
+                   window.dispatchEvent(new CustomEvent('loadLevel', { detail: { levelId: currentId } }));
+                 }" 
+        title="Restart Level">
+  <span class="hud-btn-icon">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+      <path d="M3 3v5h5"/>
+    </svg>
+  </span>
+  <span class="hud-btn-label">Restart</span>
+</button>
+</div>
+        <div class="undo-wrap">
+          <button class="hud-btn hud-btn-undo" id="btn-undo" title="Undo last move">
+            <span class="hud-btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M3 13A9 9 0 1 0 6 6.3L3 9"/></svg></span>
+            <span class="hud-btn-label">Undo</span>
+          </button>
+          <span class="undo-count" id="undo-count">5</span>
+        </div>
+        <button class="hud-btn hud-btn-vial" id="btn-add-vial" title="Add empty vial — costs 300 coins">
+          <span class="hud-btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M8 3v7L4 19a2 2 0 0 0 1.8 2.8h12.4A2 2 0 0 0 20 19l-4-9V3"/><line x1="6" y1="13" x2="18" y2="13"/></svg></span>
+          <span class="hud-btn-label">+Vial</span>
+          <span class="hud-btn-cost">300🪙</span>
+        </button>
+        <div class="hud-moves" id="hud-moves-box">
+          <span class="hud-moves-label">Moves</span>
+          <span class="hud-moves-count" id="hud-moves">0</span>
+          <span class="hud-moves-limit" id="hud-moves-limit">/ ∞</span>
+        </div>
+      </div>
+      <div class="hud-level-name" id="hud-level-name">Level 1</div>
+      <div class="hud-right">
+        <div class="hud-stars" id="hud-stars">
+          <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
+        </div>
+        <div class="hud-coins">
+          <span class="coin-icon">🪙</span><span id="hud-coins">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="moves-bar-wrap">
+      <div class="moves-bar" id="moves-bar"></div>
+      <div class="moves-bar-shine"></div>
+    </div>
+    <div id="canvas-container">
+      <div id="p5-canvas-wrapper"></div>
+      <div id="invalid-flash"></div>
+    </div>
+  </div>
+
+  <div id="screen-win" class="screen arcane-bg">
+    <!-- particle burst canvas -->
+    <canvas id="win-particles" class="win-particles-canvas"></canvas>
+
+    <div class="win-card">
+
+      <!-- top glow halo behind witch -->
+      <div class="win-halo"></div>
+
+      <!-- witch image -->
+      <div class="win-witch-wrap">
+        <img src="assets/images/character/star_witch.png"
+             alt="Witch" class="win-witch-img" draggable="false">
+        <div class="win-witch-glow"></div>
+      </div>
+
+      <!-- title -->
+      <div class="win-title" id="win-title-text">Order Restored!</div>
+
+      <!-- subtitle label -->
+      <div class="win-subtitle-label" id="win-subtitle-label">Level Complete</div>
+
+      <!-- stars row -->
+      <div class="win-stars" id="win-stars">
+        <span class="win-star">⭐</span>
+        <span class="win-star">⭐</span>
+        <span class="win-star">⭐</span>
+      </div>
+
+      <!-- divider rule -->
+      <div class="win-rule"></div>
+
+      <!-- stats row -->
+      <div class="win-stats">
+        <div class="win-stat">
+          <span class="win-stat-label">Moves Used</span>
+          <span class="win-stat-value" id="win-moves">—</span>
+        </div>
+        <div class="win-stat-sep">✦</div>
+        <div class="win-stat">
+          <span class="win-stat-label">Par Moves</span>
+          <span class="win-stat-value" id="win-par">—</span>
+        </div>
+      </div>
+
+      <!-- coin reward pill -->
+      <div class="win-reward">
+        <span class="win-reward-coin">🪙</span>
+        <span class="win-reward-text"><span id="win-coins">+50</span> coins earned</span>
+      </div>
+
+      <!-- action buttons -->
+      <div class="win-buttons">
+        <button class="win-btn-secondary" onclick="SoundManager.play('clickGeneral'); ScreenManager.show('menu')">
+          Level Select
+        </button>
+        <button class="win-btn-primary" id="btn-next-level">
+          Next Level <span class="win-btn-star">✦</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="screen-shop" class="screen arcane-bg">
+    <div class="shop-header">
+      <button class="btn-icon" onclick="ScreenManager.back()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg></button>
+      <span class="shop-title">✦   Shop   ✦</span>
+      <div class="shop-balance">🪙 <span id="shop-coin-count">0</span></div>
+    </div>
+    <div class="shop-section-title">— Background Themes —</div>
+    <button class="unlock-random-btn" id="btn-unlock-random">
+       +1000 Unlock Random Background
+    </button>
+    <div class="shop-grid" id="shop-grid"></div>
+  </div>
+
+  <script src="src/levels/levelData.js"></script>
+  <script src="src/levels/Level.js"></script>
+  <script src="src/levels/LevelLoader.js"></script>
+  <script src="src/potion.js"></script>
+  <script src="src/vial.js"></script>
+  <script src="src/mechanics.js"></script>
+  <script src="src/character.js"></script>
+  <script src="src/game.js"></script>
+  <script src="src/physics/liquidPhysics.js"></script>
+  <script src="src/physics/particleSystem.js"></script>
+  <script src="src/ui.js"></script>
+  <script src="js/shopLogic.js"></script>
+  <script src="js/soundManager.js"></script>
+  <script src="js/settingsModal.js"></script>
+  <script src="js/gameMechanics.js"></script>
+  <script src="js/screenManager.js"></script>
+  <script src="js/p5.min.js"></script>
+  <script src="tutorial-bundle.js"></script>
+  <script src="sketch.js"></script>
+
+
+  <!-- ════════════════════════════════════════════════════════
+       SETTINGS MODAL
+  ════════════════════════════════════════════════════════ -->
+  <div id="settings-overlay" class="settings-overlay" onclick="SettingsModal.close(event)">
+    <div class="settings-modal" role="dialog" aria-modal="true" aria-label="Settings">
+
+      <button class="settings-close" onclick="SettingsModal.close()" aria-label="Close">✕</button>
+
+      <h2 class="settings-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Settings</h2>
+
+      <!-- Sound Effects -->
+      <div class="settings-section">
+        <div class="settings-section-label">🔊 Sound Effects</div>
+        <div class="settings-row">
+          <span class="settings-mute-btn" id="sfx-mute-icon" onclick="SettingsModal.toggleMute()">🔊</span>
+          <input type="range" class="settings-slider" id="sfx-volume"
+                 min="0" max="100" value="70"
+                 oninput="SettingsModal.setVolume(this.value)"
+                 aria-label="Sound effects volume">
+          <span class="settings-vol-label" id="sfx-vol-label">70%</span>
+        </div>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <!-- Soundtrack -->
+      <div class="settings-section">
+        <div class="settings-section-label">🎵 Soundtrack</div>
+        <div class="settings-row">
+          <span class="settings-mute-btn" id="music-mute-icon" onclick="SettingsModal.toggleMusicMute()">🎵</span>
+          <input type="range" class="settings-slider" id="music-volume"
+                 min="0" max="100" value="45"
+                 oninput="SettingsModal.setMusicVolume(this.value)"
+                 aria-label="Soundtrack volume">
+          <span class="settings-vol-label" id="music-vol-label">45%</span>
+        </div>
+        <div class="settings-track-row">
+          <button class="track-btn active" id="track-btn-default"
+                  onclick="SettingsModal.setTrack('default')">Default</button>
+          <button class="track-btn" id="track-btn-soundtrack1"
+                  onclick="SettingsModal.setTrack('soundtrack1')">Soundtrack 1</button>
+        </div>
+      </div>
+
+      <div class="settings-divider"></div>
+
+      <!-- About -->
+      <div class="settings-section">
+        <div class="settings-section-label">✦ About</div>
+        <div class="settings-about">
+          <div class="about-title">Alchemy of Order</div>
+          <div class="about-sub">Potion-Sorting Puzzle Game</div>
+          <div class="about-desc">
+            Sort every vial so each holds only one color of potion.
+            Select a vial, then tap another to pour — matching colors
+            stack and move together. Seal every vial to complete the level!
+          </div>
+          <div class="about-meta">
+            <span>Version 1.0</span>
+            <span>·</span>
+            <span>25 Levels</span>
+            <span>·</span>
+            <span>4 Mechanics</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

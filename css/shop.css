@@ -1,0 +1,135 @@
+/* ================================================================
+   shop.css — Shop / background selector styles
+   Alchemy of Order
+================================================================ */
+
+#screen-shop {
+  flex-direction: column;
+  align-items: center;
+  z-index: 15;
+  padding: 30px 20px;
+  overflow-y: auto;
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.shop-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 24px;
+  color: var(--gold);
+  flex: 1;
+  text-align: center;
+}
+
+.shop-balance {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--arcane);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 18px;
+  color: var(--gold-light);
+}
+
+.shop-section-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 14px;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* ─── UNLOCK RANDOM BUTTON ───────────────────────────────────── */
+.unlock-random-btn {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, var(--purple-mist), #5b21b6);
+  color: #e9d5ff;
+  border: 1px solid #7c3aed;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+}
+.unlock-random-btn:hover {
+  background: linear-gradient(135deg, #5b21b6, var(--purple-mist));
+  box-shadow: 0 4px 20px #7c3aed50;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 700px;
+  margin-bottom: 20px;
+}
+
+.shop-item {
+  background: var(--arcane);
+  border: 1px solid var(--purple-mist);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.shop-item:hover              { border-color: var(--gold); transform: translateY(-2px); }
+.shop-item.owned              { border-color: #22c55e; cursor: default; }
+.shop-item.active-bg          { border-color: var(--teal-potion); box-shadow: 0 0 12px #2dd4bf40; }
+
+.shop-item-preview {
+  width: 80px;
+  height: 50px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  overflow: hidden;
+}
+
+.shop-item-name {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 10px;
+  color: var(--text-light);
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.shop-item-price {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--gold);
+}
+
+.shop-item-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: 'Crimson Text', serif;
+  letter-spacing: 1px;
+}
+.badge-owned  { background: #22c55e30; color: #22c55e; }
+.badge-active { background: #2dd4bf30; color: var(--teal-potion); }

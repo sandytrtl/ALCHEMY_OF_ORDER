@@ -1,0 +1,574 @@
+
+#screen-intro {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: transparent !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+
+.intro-container {
+  position: relative;
+  height: min(80vh, calc(85vw / 1.5));
+  aspect-ratio: 3 / 2;
+  border-radius: 16px;
+  overflow: hidden;
+  isolation: isolate;
+
+  box-shadow:
+    0 0 0 1px rgba(233, 196, 106, 0.35),
+    0 0 40px  rgba(168, 85, 247, 0.40),
+    0 0 100px rgba(168, 85, 247, 0.18),
+    0 0 180px rgba(100, 40, 180, 0.12),
+    0 40px 100px rgba(0, 0, 0, 0.95);
+}
+
+.intro-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  display: block;
+}
+
+.intro-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 45%,
+      transparent 40%,
+      rgba(4, 2, 12, 0.55) 100%);
+}
+
+.intro-container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+    transparent 35%, rgba(6,3,15,0.5) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.smoke-canvas {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+
+
+#smoke-left {
+  /* centered on x=18%: 18% - 11% = 7% left edge, width=22% */
+  left: 7%;
+  bottom: 10%;
+  top: 65%;
+  width: 30%;
+  /* from y=67.5% to bottom = 32.5% height */
+  height: 36%;
+}
+
+#smoke-right {
+  /* centered on x=80%: 80% - 12% = 68% left edge, width=24% */
+  right: 58%;
+  bottom: 0;
+  width: 44%;
+  top: 60%;
+  /* from y=62% to bottom = 38% height */
+  height: 80%;
+}
+
+
+/* ─── BANNER (top, overlays the shelves) ─────────────────────── */
+.banner-wrapper {
+  position: absolute;
+  top: 40px;            /* Adjusted from -70px since the image is gone */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;           /* Wider for text flexibility */
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: fade-slide-down 0.9s ease-out both;
+}
+
+.title-banner {
+  display: none;
+}
+/* Hide the HTML text overlay — the banner image has the text baked in */
+.banner-text {
+  position: relative;   /* Changed from absolute */
+  text-align: center;
+  width: 100%;
+  pointer-events: none;
+  overflow: visible;    /* Allow glow/shadows to bleed out */
+}
+
+.banner-text::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(105deg,
+    transparent       0%,
+    rgba(255,245,180,0.00)  30%,
+    rgba(255,245,180,0.28)  48%,
+    rgba(255,255,220,0.38)  52%,
+    rgba(255,245,180,0.18)  60%,
+    transparent       100%);
+  animation: banner-sweep 3.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes banner-sweep {
+  0%   { left: -60%; }
+  55%  { left: 140%; }
+  100% { left: 140%; }
+}
+
+
+.banner-star {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  z-index: 3;
+}
+.banner-star:nth-child(1) { left: 10%; top: 20%; }
+.banner-star:nth-child(2) { left: 15%; top: -10%; }
+.banner-star:nth-child(3) { right: 10%; top: 20%; }
+.banner-star:nth-child(4) { right: 15%; top: -10%; }
+
+/* Each star is a golden 5-point shape that spins + twinkles */
+.banner-star::before {
+  content: '✦';
+  position: absolute;
+  font-size: clamp(10px, 1.5vw, 18px);
+  color: #FFD700;
+  text-shadow:
+    0 0 6px  #FFE060,
+    0 0 14px #FFC040,
+    0 0 28px #C9933A80;
+  transform-origin: center;
+  animation: star-spin 4s linear infinite var(--star-delay, 0s);
+  filter: drop-shadow(0 0 4px #FFD700);
+}
+
+.banner-star:nth-child(1)::before { --star-delay:  0.0s; animation-direction: normal; }
+.banner-star:nth-child(2)::before { --star-delay: -1.0s; animation-direction: reverse; }
+.banner-star:nth-child(3)::before { --star-delay: -2.0s; animation-direction: normal; }
+.banner-star:nth-child(4)::before { --star-delay: -3.0s; animation-direction: reverse; }
+
+@keyframes star-spin {
+  0%   { transform: rotate(0deg)   scale(1);    opacity: 0.7; }
+  25%  { transform: rotate(90deg)  scale(1.35); opacity: 1;   }
+  50%  { transform: rotate(180deg) scale(0.9);  opacity: 0.6; }
+  75%  { transform: rotate(270deg) scale(1.25); opacity: 1;   }
+  100% { transform: rotate(360deg) scale(1);    opacity: 0.7; }
+}
+
+.game-title {
+
+  position: relative;
+
+  top: 60 px;  
+
+  z-index: 1;
+
+  font-family: 'Cinzel Decorative', 'Palatino Linotype', serif;
+
+  font-size: clamp(14px, 2.5vw, 50px);
+
+  font-weight: 800;
+
+  color: #f5e8a3;
+
+  margin: 0 0 2px;
+
+  line-height: 1.1;
+
+  letter-spacing: 2.5px;
+
+  
+  
+    text-shadow:
+
+    /* depth stack — dark purple offset shadows */
+
+    0.5px 0.6px 0   rgba(70, 15, 110, 0.80),
+
+    1.0px 1.2px 2px rgba(70, 15, 110, 0.65),
+
+    1.5px 1.8px 4px rgba(70, 15, 110, 0.50),
+
+    2.0px 2.4px 6px rgba(70, 15, 110, 0.38),
+
+    2.5px 3.0px 8px rgba(70, 15, 110, 0.26),
+
+    3.0px 3.6px 10px rgba(70, 15, 110, 0.16),
+
+    3.5px 4.2px 14px rgba(70, 15, 110, 0.08),
+
+    /* warm glow aura */
+
+    0 0 6px  rgba(255, 245, 192, 0.90),
+
+    0 0 14px rgba(255, 224,  80, 0.80),
+
+    0 0 30px rgba(240, 192,  48, 0.60),
+
+    0 0 55px rgba(201, 147,  58, 0.40),
+
+    0 0 90px rgba(180, 110,  20, 0.20);
+
+
+
+  animation: title-breathe 3.5s ease-in-out infinite,
+
+             title-scale   3.5s ease-in-out infinite;
+
+}
+
+
+
+/* Glow pulses between warm gold and brilliant white-gold */
+
+@keyframes title-breathe {
+
+  0%, 100% {
+
+    text-shadow:
+
+      0.5px 0.6px 0   rgba(70,15,110,0.80),
+
+      1.0px 1.2px 2px rgba(70,15,110,0.65),
+
+      1.5px 1.8px 4px rgba(70,15,110,0.50),
+
+      2.0px 2.4px 6px rgba(70,15,110,0.38),
+
+      2.5px 3.0px 8px rgba(70,15,110,0.26),
+
+      3.0px 3.6px 10px rgba(70,15,110,0.16),
+
+      0 0 6px  rgba(255,245,192,0.90),
+
+      0 0 14px rgba(255,224, 80,0.80),
+
+      0 0 30px rgba(240,192, 48,0.60),
+
+      0 0 55px rgba(201,147, 58,0.40),
+
+      0 0 90px rgba(180,110, 20,0.20);
+
+  }
+
+  50% {
+
+    text-shadow:
+
+      0.5px 0.6px 0   rgba(70,15,110,0.85),
+
+      1.0px 1.2px 2px rgba(70,15,110,0.70),
+
+      1.5px 1.8px 4px rgba(70,15,110,0.55),
+
+      2.0px 2.4px 6px rgba(70,15,110,0.40),
+
+      2.5px 3.0px 8px rgba(70,15,110,0.28),
+
+      3.0px 3.6px 10px rgba(70,15,110,0.18),
+
+      /* blast: white core + wide bloom */
+
+      0 0 4px  rgba(255,255,255,1.00),
+
+      0 0 10px rgba(255,248,200,0.95),
+
+      0 0 22px rgba(255,224, 80,0.90),
+
+      0 0 44px rgba(245,192, 48,0.75),
+
+      0 0 75px rgba(220,155, 30,0.55),
+
+      0 0 120px rgba(200,120,10,0.30);
+
+  }
+
+}
+
+
+
+/* Subtle scale breathe — matches JS sin(introTime*0.048)*0.013 */
+
+@keyframes title-scale {
+
+  0%, 100% { transform: scale(1.000); }
+
+  50%       { transform: scale(1.013); }
+
+}
+
+.game-subtitle {
+  font-family: 'pixel sans', monospace;
+  top: 44px;
+  font-size: clamp(8px, 1.2vw, 14px);
+  color: #ffe080;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  margin-top: 10px;
+  animation: subtitle-sync 8s ease-in-out infinite;
+}
+
+/* Bubbling Logic */
+.bubbles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.bubbles span {
+  position: absolute;
+  bottom: 0;
+  background: rgba(245, 232, 163, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: bubble-rise 10s infinite ease-in;
+}
+
+/* Individual Bubble Placements */
+.bubbles span:nth-child(1) { left: 10%; width: 10px; height: 10px; animation-delay: 0s; }
+.bubbles span:nth-child(2) { left: 30%; width: 15px; height: 15px; animation-delay: 2s; }
+.bubbles span:nth-child(3) { left: 50%; width: 8px; height: 8px; animation-delay: 4s; }
+.bubbles span:nth-child(4) { left: 70%; width: 12px; height: 12px; animation-delay: 1s; }
+.bubbles span:nth-child(5) { left: 90%; width: 6px; height: 6px; animation-delay: 6s; }
+
+@keyframes bubble-rise {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  20% { opacity: 0.6; }
+  100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
+}
+
+@keyframes title-float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.02); }
+}
+
+@keyframes subtitle-sync {
+  0%, 100% { opacity: 0.4; letter-spacing: 6px; }
+  50% { opacity: 1; letter-spacing: 10px; }
+}
+
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+/* ─── WITCH (portrait image, stands at bottom-center) ────────── */
+.witch-sprite {
+  position: absolute;
+  top: 110px;           /* sits just above the buttons */
+  left: 453px;          /* centered on the container, not the screen */
+  transform: translateX(-50%);
+  height: 60%;           /* tall portrait — let height drive it */
+  width: 300px;
+  object-fit: contain;
+  z-index: 4;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.7));
+  animation: witch-float 4s ease-in-out infinite;
+}
+
+@keyframes witch-float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(-10px); }
+}
+
+
+.smoke-canvas {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Left jar: brown clay pot ~18% left, bottom ~28% */
+#smoke-left {
+  left: 8%;
+  bottom: 18%;
+  width: 18%;
+  height: 40%;
+}
+
+/* Right jar: purple cauldron ~68% left, bottom ~30% */
+#smoke-right {
+  left: 62%;
+  bottom: 20%;
+  width: 20%;
+  height: 45%;
+}
+
+/* ─── BUTTONS (pinned to bottom, above witch) ────────────────── */
+.intro-buttons {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 7;
+  animation: fade-slide-up 1s ease-out 0.5s both;
+}
+
+/* ── GLOWING BEGIN BUTTON ── */
+.fantasy-button {
+  position: relative;
+  padding: 13px 50px 13px 44px;
+  font-family: 'envogue', 'Cinzel Decorative', serif;
+  font-size: clamp(0.65rem, 1.25vw, 1rem);
+  font-weight: 700;
+  color: #160800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  overflow: hidden;               /* clip the shimmer sweep */
+
+  /* Warm amber-gold fill */
+  background: linear-gradient(175deg,
+    #fff9d0 0%,
+    #ffe066 15%,
+    #f0c040 45%,
+    #d49020 70%,
+    #b87010 100%);
+
+  box-shadow:
+    /* hard bottom edge (3D press feel) */
+    0 5px 0 #7a4d08,
+    /* close warm glow */
+    0 0 0 1.5px #8a5c10,
+    0 0 16px  rgba(240,192,48,0.55),
+    0 0 36px  rgba(220,160,30,0.30),
+    0 0 70px  rgba(180,120,20,0.18),
+    /* depth shadow */
+    0 8px 22px rgba(0,0,0,0.65),
+    /* inner top highlight */
+    inset 0 1px 0 rgba(255,255,255,0.55);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  animation: btn-breathe 2.8s ease-in-out infinite;
+}
+@keyframes btn-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 2px #7a5210,
+      0 0 14px  #e9c04680,
+      0 0 32px  #e9c04640,
+      0 0 60px  #c9933a30,
+      0 6px 0   #7a4e10,
+      0 10px 20px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px #a07020,
+      0 0 20px  #ffe060cc,
+      0 0 50px  #f0c04070,
+      0 0 90px  #c9933a50,
+      0 6px 0   #7a4e10,
+      0 10px 24px rgba(0,0,0,0.65),
+      inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+}
+
+/* Animated border shimmer */
+.fantasy-button::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    #ffe680, #c9933a, #a855f7, #c9933a, #ffe680
+  );
+  z-index: -1;
+  opacity: 0.7;
+  animation: border-spin 4s linear infinite;
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes border-spin {
+  to { --angle: 360deg; }
+}
+
+.fantasy-button:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(180deg,
+    #fffbe0 0%, #ffe87a 20%, #f5d060 55%, #daa030 100%);
+}
+
+.fantasy-button:active {
+  transform: translateY(3px);
+}
+
+.plus-icon {
+  font-size: 1.1em;
+  opacity: 0.30;
+}
+
+.shop-shortcut {
+  background: rgba(6, 3, 15, 0.65);
+  border: 1px solid rgba(233,196,106,0.5);
+  color: rgba(233,196,106,0.9);
+  padding: 5px 22px;
+  font-family: 'Crimson Text', serif;
+  font-size: clamp(0.7rem, 1.1vw, 0.9rem);
+  border-radius: 20px;
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  backdrop-filter: blur(4px);
+}
+
+.shop-shortcut:hover {
+  background: rgba(233,196,106,0.12);
+  border-color: #e9c46a;
+  color: #f7e98e;
+}
+
+/* ─── ENTRY ANIMATIONS ───────────────────────────────────────── */
+@keyframes fade-slide-down {
+  from { opacity: 0; transform: translateX(-50%) translateY(-22px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+@keyframes fade-slide-up {
+  from { opacity: 0; transform: translateX(-50%) translateY(18px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Title shimmer (still used by .game-title on other screens) */
+@keyframes title-shimmer {
+  0%, 100% { filter: drop-shadow(0 0 20px #c9933a80); }
+  50%       { filter: drop-shadow(0 0 40px #f0c060cc); }
+}
